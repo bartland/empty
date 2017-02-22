@@ -1,0 +1,75 @@
+#!/bin/bash
+
+# http://stackoverflow.com/questions/192249/how-do-i-parse-command-line-arguments-in-bash
+
+getopt --test > /dev/null
+if [[ $? -ne 4 ]]; then
+    echo "I’m sorry, `getopt --test` failed in this environment."
+    exit 1
+fi
+
+#SHORT=dfo:v
+#LONG=debug,force,output:,verbose
+SHORT=vr
+LONG=verbose,reset
+
+# -temporarily store output to be able to check for errors
+# -activate advanced mode getopt quoting e.g. via “--options”
+# -pass arguments only via   -- "$@"   to separate them correctly
+PARSED=`getopt --options $SHORT --longoptions $LONG --name "$0" -- "$@"`
+if [[ $? -ne 0 ]]; then
+    # e.g. $? == 1
+    #  then getopt has complained about wrong arguments to stdout
+    exit 2
+fi
+# use eval with "$PARSED" to properly handle the quoting
+eval set -- "$PARSED"
+
+# now enjoy the options in order and nicely split until we see --
+while true; do
+    case "$1" in
+        -v|--verbose)
+            v=y
+            shift
+            ;;
+        -r|--reset)
+            r=y
+            shift
+            ;;
+        --)
+            shift
+            break
+            ;;
+        *)
+            echo "Programming error"
+            exit 3
+            ;;
+    esac
+done
+
+# handle non-option arguments
+if [[ $# -eq 1 ]]; then
+  branch=$1
+else
+  echo "$0: --reset <branch_to_delete>"
+  echo "e.g. $0 feature"
+  echo "WARNING: --reset|-r will undo ALL local changes"
+  echo
+  git status
+  exit 4
+fi
+
+repo=${PWD##*/}
+git checkout master
+if [ "$r" == "y" ]; then
+  git reset --hard
+  git clean -f
+fi
+git branch -d $branch
+git remote -v update
+git merge upstream/master
+git push
+git status
+git checkout -b $branch origin/$branch
+git pull
+git push --set-upstream origin $branch

@@ -1,0 +1,77 @@
+#!/bin/bash
+
+# http://stackoverflow.com/questions/192249/how-do-i-parse-command-line-arguments-in-bash
+
+getopt --test > /dev/null
+if [[ $? -ne 4 ]]; then
+    echo "I’m sorry, `getopt --test` failed in this environment."
+    exit 1
+fi
+
+#SHORT=dfo:v
+#LONG=debug,force,output:,verbose
+SHORT=vua
+LONG=verbose,usedefaults,add
+
+# -temporarily store output to be able to check for errors
+# -activate advanced mode getopt quoting e.g. via “--options”
+# -pass arguments only via   -- "$@"   to separate them correctly
+PARSED=`getopt --options $SHORT --longoptions $LONG --name "$0" -- "$@"`
+if [[ $? -ne 0 ]]; then
+    # e.g. $? == 1
+    #  then getopt has complained about wrong arguments to stdout
+    exit 2
+fi
+# use eval with "$PARSED" to properly handle the quoting
+eval set -- "$PARSED"
+
+# now enjoy the options in order and nicely split until we see --
+while true; do
+    case "$1" in
+        -v|--verbose)
+            v=y
+            shift
+            ;;
+        -a|--add)
+            a=y
+            shift
+            ;;
+        -u|--usedefaults)
+            u=y
+            shift
+            ;;
+        --)
+            shift
+            break
+            ;;
+        *)
+            echo "Programming error"
+            exit 3
+            ;;
+    esac
+done
+
+# handle non-option arguments
+if [ "$u" == "y" ]; then
+  origin=bartland
+  upstream=AUSid
+elif [[ $# -eq 2 ]]; then
+  origin=$1
+  upstream=$2
+else
+  echo "$0: -a|--add origin_user upstream_user"
+  echo "$0: -u[a]|--usedefaults [--add]"
+  echo "e.g. bartland AUSid (defaults)"
+  echo "add instead of set-url"
+  echo
+  git remote -v
+  exit 4
+fi
+mode=set-url
+if [ "$a" == "y" ]; then
+  mode=add
+fi
+repo=${PWD##*/}
+git remote $mode origin https://github.com/bartland/$repo.git
+git remote $mode upstream https://github.com/AUSid/$repo.git
+git remote -v
