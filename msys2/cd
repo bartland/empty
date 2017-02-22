@@ -1,0 +1,14 @@
+cd ~/git/ato/kar-yeow/AUSid.Svr.FIdS
+cd ~/git/ato/me/AUSid.SDK
+cd ~/git/ato/ausid/AUSid.SDK
+
+cd /e/dev/KM/_Root/AUSkey/Dev/CRebuild/bext
+cd /e/dev/KM/_Root/AUSkey/Dev/CRebuild/SDK-C
+cd /e/dev/KM/_Root/AUSkey/Dev/Current/bext
+cd /e/dev/KM/_Root/AUSkey/Dev/Current/SDK-C/abrbase/_misc
+cd /e/dev/KM/_Root/AUSkey/Dev/ucdm7/bext
+cd /e/dev/KM/_Root/AUSkey/Dev/ucdm7/SDK-C/abrbase/_misc
+cd /e/dev/KM/_Root/AUSkey/Build/1608/bext
+cd /e/dev/KM/_Root/AUSkey/Build/1608/SDK-C/abrbase/_misc
+cd /e/dev/KM/_Root/AUSkey/Build/1612/bext
+cd /e/dev/KM/_Root/AUSkey/Build/1612/SDK-C/abrbase/_misc

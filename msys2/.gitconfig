@@ -1,0 +1,11 @@
+[http]
+    #sslVerify = false
+    cookiefile = ~/gitcookies.txt
+	sslCAInfo = /home/UCDM7/git-certs/trusted-certs.pem
+[core]
+    editor = "/e/pf/geany/bin/geany  -i -m -n -s"
+[user]
+    name = bartland
+    email = bruce.cartland@pobox.com
+[credential]
+    helper = store
