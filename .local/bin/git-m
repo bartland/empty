@@ -65,11 +65,30 @@ if [ "$r" == "y" ]; then
   git reset --hard
   git clean -f
 fi
+
+echo "--> git branch -d $branch"
 git branch -d $branch
+
+echo "--> git remote -v update"
 git remote -v update
+
+echo "--> git merge upstream/master"
 git merge upstream/master
+
+echo "--> git push"
 git push
+
+echo "--> git status"
 git status
+
+echo "--> git checkout -b $branch origin/$branch"
 git checkout -b $branch origin/$branch
+
+echo "--> git checkout -b $branch"
+git checkout -b $branch
+
+echo "--> git pull"
 git pull
+
+echo "--> git push --set-upstream origin $branch"
 git push --set-upstream origin $branch

@@ -72,6 +72,9 @@ if [ "$a" == "y" ]; then
   mode=add
 fi
 repo=${PWD##*/}
+echo "--> git remote $mode origin https://github.com/bartland/$repo.git"
 git remote $mode origin https://github.com/bartland/$repo.git
+echo "--> git remote $mode upstream https://github.com/AUSid/$repo.git"
 git remote $mode upstream https://github.com/AUSid/$repo.git
+echo "--> git remote -v"
 git remote -v
