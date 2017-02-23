@@ -59,11 +59,13 @@ else
 fi
 
 function runcmd {
-    echo $1 "${args[@]}"
-    $1 "${args[@]}"
+    cmd=$1; shift
+    echo $cmd "$@"
+    $cmd "$@"
 }
 function setopt {
     args=("${@}")
+    runcmd "git config --local --unset" "$1"
     runcmd "git config --global" "${args[@]}"
 }
 
@@ -79,5 +81,9 @@ setopt "credential.helper" "store"
 if [ "$user" == "bartland" ]; then
     setopt "core.editor" "geany  -i -m -n -s"
 fi
-echo "-------------------------------------"
+echo "------------- SYSTEM ------------------------"
+git config --system -l
+echo "------------- GLOBAL ------------------------"
 git config --global -l
+echo "------------- LOCAL -------------------------"
+git config --local -l
