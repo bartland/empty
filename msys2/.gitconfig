@@ -1,11 +1,13 @@
 [http]
-    #sslVerify = false
-    cookiefile = ~/gitcookies.txt
-    sslCAInfo = ~/git-certs/trusted-certs.pem
+	sslVerify = true
+	cookiefile = ~/gitcookies.txt
+	sslCAInfo = ~/git-certs/trusted-certs.pem
 [core]
-    editor = "/e/pf/geany/bin/geany  -i -m -n -s"
+	ignorecase = false
+	autocrlf = false
+	editor = geany  -i -m -n -s
 [user]
-    name = bartland
-    email = bruce.cartland@pobox.com
+	name = bartland
+	email = bruce.cartland@pobox.com
 [credential]
-    helper = store
+	helper = store
