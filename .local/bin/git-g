@@ -1,0 +1,66 @@
+#!/bin/bash
+
+user=bartland
+reporoot=AUSid
+repo=db
+
+# http://stackoverflow.com/questions/192249/how-do-i-parse-command-line-arguments-in-bash
+getopt --test > /dev/null
+if [[ $? -ne 4 ]]; then
+    echo "I’m sorry, `getopt --test` failed in this environment."
+    exit 1
+fi
+
+#SHORT=dfo:v
+#LONG=debug,force,output:,verbose
+SHORT=v
+LONG=verbose
+
+# -temporarily store output to be able to check for errors
+# -activate advanced mode getopt quoting e.g. via “--options”
+# -pass arguments only via   -- "$@"   to separate them correctly
+PARSED=`getopt --options $SHORT --longoptions $LONG --name "$0" -- "$@"`
+if [[ $? -ne 0 ]]; then
+    # e.g. $? == 1
+    #  then getopt has complained about wrong arguments to stdout
+    exit 2
+fi
+# use eval with "$PARSED" to properly handle the quoting
+eval set -- "$PARSED"
+
+# now enjoy the options in order and nicely split until we see --
+while true; do
+    case "$1" in
+        -v|--verbose)
+            v=y
+            shift
+            ;;
+        --)
+            shift
+            break
+            ;;
+        *)
+            echo "Programming error"
+            exit 3
+            ;;
+    esac
+done
+
+# handle non-option arguments
+if [[ $# -eq 1 ]]; then
+  repo=$1
+elif [[ $# -eq 2 ]]; then
+  repo=$1
+  reporoot=$2
+elif [[ $# -eq 3 ]]; then
+  repo=$1
+  reporoot=$2
+  user=$3
+else
+  echo "$0: repo [reporoot [user]]"
+  echo "e.g. $0: $repo $reporoot $user (defaults)"
+  echo
+  exit 4
+fi
+
+git clone https://github.com/$user/$reporoot.$repo.git
